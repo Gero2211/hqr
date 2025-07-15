@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy - HouseQR{% endblock %}
+{% block content %}
+<style>
+.privacy-container {
+    max-width: 700px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2.2em 1.5em 2em 1.5em;
+}
+.privacy-title {
+    color: #A020F0;
+    text-align: center;
+    margin-top: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.privacy-subtitle {
+    color: #800080;
+    font-size: 1.1em;
+    text-align: center;
+    margin-bottom: 2em;
+}
+.privacy-section {
+    margin-bottom: 2em;
+}
+.privacy-section h3 {
+    color: #A020F0;
+    font-size: 1.13em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+.privacy-section ul {
+    margin-left: 1.5em;
+    color: #800080;
+    font-size: 1em;
+}
+.privacy-section p {
+    color: #800080;
+    font-size: 1em;
+}
+.privacy-link {
+    color: #FF0090;
+    text-decoration: underline;
+}
+.privacy-footer {
+    text-align: center;
+    color: #800080;
+    font-size: 0.98em;
+    margin-top: 2em;
+}
+@media (max-width: 600px) {
+    .privacy-container { padding: 1em 0.4em; }
+    .privacy-title { font-size: 1.1em; }
+    .privacy-section h3 { font-size: 1em; }
+    .privacy-subtitle { font-size: 1em; }
+}
+</style>
+<div class="privacy-container">
+    <div class="privacy-title">Privacy Policy</div>
+    <div class="privacy-subtitle">
+        La tua privacy è importante per noi. In questa pagina trovi tutte le informazioni su come trattiamo i tuoi dati personali su HouseQR.
+    </div>
+    <hr style="border:0;border-top:2px solid #A020F0;margin:1.5em 0;">
+    <section class="privacy-section">
+        <h3>1. Quali dati raccogliamo?</h3>
+        <ul>
+            <li><b>Dati di registrazione:</b> nome, cognome, indirizzo, telefono, email, username, password (criptata).</li>
+            <li><b>Dati di utilizzo:</b> messaggi associati ai QR, scansioni dei QR code (data, ora, IP, user agent).</li>
+            <li><b>Dati tecnici:</b> log di accesso e attività per sicurezza e audit.</li>
+        </ul>
+    </section>
+    <section class="privacy-section">
+        <h3>2. Come usiamo i tuoi dati?</h3>
+        <ul>
+            <li>Per permetterti di gestire i tuoi QR code e i messaggi associati.</li>
+            <li>Per inviarti email di verifica, notifiche e recupero password.</li>
+            <li>Per garantire la sicurezza degli accessi e delle funzionalità.</li>
+            <li>Per migliorare il servizio in modo anonimo e aggregato.</li>
+        </ul>
+    </section>
+    <section class="privacy-section">
+        <h3>3. Con chi condividiamo i tuoi dati?</h3>
+        <p>
+            I tuoi dati <b>non vengono mai venduti</b> a terzi. Possiamo condividere dati solo con fornitori di servizi tecnici (es. email, hosting) strettamente necessari al funzionamento di HouseQR e sempre nel rispetto della normativa vigente.
+        </p>
+    </section>
+    <section class="privacy-section">
+        <h3>4. Sicurezza</h3>
+        <p>
+            Proteggiamo i tuoi dati con misure tecniche e organizzative adeguate. Le password sono sempre criptate e non possono essere recuperate in chiaro da nessuno.
+        </p>
+    </section>
+    <section class="privacy-section">
+        <h3>5. I tuoi diritti</h3>
+        <ul>
+            <li>Puoi chiedere in qualsiasi momento la modifica o cancellazione dei tuoi dati.</li>
+            <li>Puoi esportare i tuoi dati personali.</li>
+            <li>Per qualsiasi richiesta, scrivi a <a href="mailto:houseqrinfo@gmail.com" class="privacy-link">houseqrinfo@gmail.com</a></li>
+        </ul>
+    </section>
+    <section class="privacy-section">
+        <h3>6. Cookie e tecnologie simili</h3>
+        <p>
+            HouseQR utilizza solo cookie tecnici e di sessione, necessari al funzionamento del sito. Non usiamo cookie di profilazione o tracciamento pubblicitario.
+        </p>
+    </section>
+    <hr style="border:0;border-top:1px solid #E5E5E5;margin:2em 0;">
+    <div class="privacy-footer">
+        Ultimo aggiornamento: giugno 2025<br>
+        Per domande o richieste sulla privacy: <a href="mailto:houseqrinfo@gmail.com" class="privacy-link">houseqrinfo@gmail.com</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% block title %}Zona pubblica QR{% endblock %}
+{% block content %}
+<style>
+.qr-pub-outer {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
+.qr-pub-box {
+    width: 100%;
+    max-width: 500px;
+    background: #f9f9f9;
+    padding: 2em 1.5em 2em 1.5em;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.qr-pub-title {
+    color: #A020F0;
+    font-size: 1.35em;
+    margin-bottom: 0.5em;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.qr-pub-owner {
+    color: #800080;
+    font-size: 1.1em;
+    margin-bottom: 0.8em;
+    text-align: center;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+.qr-pub-info {
+    color: #A020F0;
+    font-size: 1.04em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+.qr-pub-info-desc {
+    color: #800080;
+    font-size: 1.02em;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+.qr-pub-msg {
+    color: #800080;
+    font-size: 1.18em;
+    text-align: center;
+    margin-bottom: 0.7em;
+    word-break: break-word;
+}
+.qr-pub-btn {
+    padding: 0.8em 2em;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin: 0.3em 0.3em 0 0.3em;
+    display: inline-block;
+}
+.qr-pub-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+
+/* --- MODAL MESSAGGIO --- */
+.qr-modal-bg {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.35);
+    z-index: 9999;
+}
+.qr-modal-box {
+    background: #fff8ff;
+    padding: 2em 1.2em 1.2em 1.2em;
+    border-radius: 16px;
+    max-width: 350px;
+    width: 92vw;
+    margin: 7vh auto;
+    box-shadow: 0 2px 12px #d1b4e3;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+}
+.qr-modal-close {
+    position: absolute;
+    top: 1em; right: 1em;
+    background: none; border: none;
+    font-size: 1.4em; color: #A020F0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.qr-modal-close:hover { color: #FF0090; }
+.qr-modal-title {
+    color: #A020F0;
+    font-size: 1.13em;
+    font-weight: bold;
+    margin-bottom: 0.7em;
+    text-align: center;
+}
+.qr-modal-form label {
+    font-weight: 600; color: #800080; margin-bottom: 0.08em; display: block; font-size: 0.98em; text-align:left;
+}
+.qr-modal-form input[type="text"], .qr-modal-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 7px;
+    border: 1.2px solid #A020F0;
+    font-size: 0.97em;
+    padding: 0.38em 0.7em;
+    margin-bottom: 0.6em;
+    background: #fff;
+    color: #800080;
+    resize: vertical;
+    display: block;
+}
+.qr-modal-form textarea { min-height: 48px; max-height: 120px; }
+.qr-modal-form button {
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff; border: none; border-radius: 7px;
+    padding: 0.55em 1.1em; font-size: 1.05em; font-weight: bold;
+    cursor: pointer; transition: background 0.2s;
+    width: 100%;
+    margin-top: 0.2em;
+}
+.qr-modal-form button:hover { background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%); }
+
+@media (max-width: 500px) {
+    .qr-pub-box { padding: 1.2em 0.5em 1.2em 0.5em; }
+    .qr-modal-box { padding: 1.2em 0.4em; max-width: 99vw; }
+}
+</style>
+<div class="qr-pub-outer">
+    <div class="qr-pub-box">
+        <div class="qr-pub-title">Zona pubblica QR</div>
+        <div class="qr-pub-owner">
+            QR PUBBLICO DI {{ nome }} {{ cognome }}
+        </div>
+        <div class="qr-pub-info">INFORMAZIONI:</div>
+        <div class="qr-pub-info-desc">
+            Questo QR code contiene informazioni pubbliche fornite dal proprietario.<br>
+            Per dettagli riservati, accedi a una delle zone private.
+        </div>
+        <div class="qr-pub-msg">{{ messaggio_pubblico }}</div>
+
+        {% if zones and zones|length > 0 %}
+            <div style="margin-top:2em;text-align:center;">
+                <div style="color:#A020F0;font-weight:bold;margin-bottom:0.5em;">Zone private disponibili:</div>
+                <div style="display:flex;flex-wrap:wrap;gap:0.7em;justify-content:center;">
+                    {% for zone in zones %}
+                        <a href="{{ url_for('qr_zone', qr_id=qr_id, zone_id=zone[0]) }}"
+                           class="qr-pub-btn">
+                           {{ zone[1] }}
+                        </a>
+                    {% endfor %}
+                </div>
+                <div style="font-size:0.95em;color:#800080;margin-top:1em;">
+                    Ogni zona è protetta da una password diversa.
+                </div>
+            </div>
+        {% endif %}
+		
+		{% if ricevi_messaggi %}
+			<div style="margin:1.2em 0 2em 0;text-align:center;">
+				<button onclick="document.getElementById('msg-modal').style.display='block';"
+						class="qr-pub-btn" style="background:#A020F0;">
+					<i class="fas fa-envelope"></i> Lascia un messaggio al proprietario
+				</button>
+			</div>
+			<!-- Modal per il form messaggio -->
+			<div id="msg-modal" class="qr-modal-bg">
+				<div class="qr-modal-box">
+					<button onclick="document.getElementById('msg-modal').style.display='none';"
+							class="qr-modal-close" title="Chiudi">&times;</button>
+					<div class="qr-modal-title">Lascia un messaggio al proprietario</div>
+					<form method="post" action="{{ url_for('send_qr_message', qr_id=qr_id) }}" class="qr-modal-form">
+						<label>Il tuo nome (opzionale)</label>
+						<input type="text" name="nome" maxlength="50">
+						<label>Il tuo messaggio</label>
+						<textarea name="messaggio" required maxlength="1000"></textarea>
+						<button type="submit">
+							<i class="fas fa-paper-plane"></i> Invia messaggio
+						</button>
+					</form>
+				</div>
+			</div>
+		{% endif %}
+
+        <div style="margin-top:2em;color:#A020F0;font-size:0.95em;text-align:center;">
+            <span style="opacity:0.7;">Powered by HouseQR</span>
+        </div>
+    </div>
+</div>
+<script>
+if(document.getElementById('msg-modal')) {
+    document.getElementById('msg-modal').addEventListener('mousedown', function(e) {
+        if(e.target === this) this.style.display = 'none';
+    });
+}
+</script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Tutti i QR Code - Admin{% endblock %}
+{% block content %}
+<style>
+.admin-qr-table-container {
+    max-width: 900px;
+    margin: 2em auto;
+    background: #fff8ff;
+    padding: 2em;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #d1b4e3;
+}
+.admin-qr-table-title {
+    color: #A020F0;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    text-align: center;
+}
+.admin-qr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.07em;
+}
+.admin-qr-table th, .admin-qr-table td {
+    border: 1px solid #E5E5E5;
+    padding: 0.7em 1em;
+    text-align: center;
+}
+.admin-qr-table th {
+    background: #A020F0;
+    color: #fff;
+    font-weight: bold;
+}
+.admin-qr-table tr:nth-child(even) {
+    background: #f3e8ff;
+}
+.admin-qr-delete-btn {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 0.4em 1em;
+    font-size: 0.98em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.admin-qr-delete-btn:hover {
+    background: #c0392b;
+}
+@media (max-width: 700px) {
+    .admin-qr-table-container { padding: 0.5em; }
+    .admin-qr-table th, .admin-qr-table td { font-size: 0.96em; padding: 0.5em 0.2em; }
+}
+.alert-success {
+    background: #e6f7f2; color: #0f5132; padding: 0.7em; border-radius: 5px; margin-bottom: 1em;
+}
+.alert-error {
+    background: #f8d7da; color: #842029; padding: 0.7em; border-radius: 5px; margin-bottom: 1em;
+}
+</style>
+
+<div class="admin-qr-table-container">
+    <div class="admin-qr-table-title"><i class="fas fa-table"></i> Elenco di tutti i QR Code</div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <table class="admin-qr-table">
+		<thead>
+			<tr>
+				<th>ID QR</th>
+				<th>Codice segreto</th>
+				<th>Email associata</th>
+				<th>Azioni</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for qr in qr_list %}
+			<tr>
+				<td>{{ qr.id }}</td>
+				<td>{{ qr.codice_segreto }}</td>
+				<td>{{ qr.email }}</td>
+				<td>
+					<form method="post" action="{{ url_for('admin_qr_delete', qr_id=qr.id) }}" style="display:inline;" onsubmit="return confirm('Sei sicuro di voler eliminare il QR {{ qr.id }}?');">
+						<button type="submit" class="admin-qr-delete-btn">
+							<i class="fas fa-trash"></i> Elimina
+						</button>
+					</form>
+				</td>
+			</tr>
+			{% else %}
+			<tr>
+				<td colspan="4" style="color:#800080;">Nessun QR code trovato.</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+    </table>
+    <div style="text-align:center;margin-top:2em;">
+        <a href="{{ url_for('admin_qr') }}" class="admin-qr-download" style="background:#A020F0;">
+            <i class="fas fa-arrow-left"></i> Torna al pannello QR
+        </a>
+    </div>
+</div>
+<!-- Font Awesome CDN for icons -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

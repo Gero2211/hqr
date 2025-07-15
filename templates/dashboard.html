@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Gestione Messaggi QR{% endblock %}
+{% block content %}
+<style>
+.qrmsg-container {
+    max-width: 500px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.2em 1.5em 1.2em;
+}
+.qrmsg-title {
+    color: #A020F0;
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.2em;
+}
+.qrmsg-label {
+    color: #800080;
+    font-weight: 600;
+    margin-bottom: 0.2em;
+    display: block;
+}
+.qrmsg-textarea {
+    width: 100%;
+    border-radius: 7px;
+    border: 1.2px solid #A020F0;
+    font-size: 1em;
+    padding: 0.6em;
+    margin-bottom: 1.2em;
+    background: #fff;
+    color: #800080;
+    box-sizing: border-box;
+    resize: vertical;
+}
+.qrmsg-btn {
+    width: 100%;
+    padding: 0.8em 0;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+    transition: background 0.2s;
+}
+.qrmsg-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.qrmsg-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.5em;
+    color: #A020F0;
+    font-weight: bold;
+    text-decoration: none;
+}
+.qrmsg-link:hover {
+    text-decoration: underline;
+}
+@media (max-width: 600px) {
+    .qrmsg-container { padding: 1em 0.3em; }
+    .qrmsg-title { font-size: 1.08em; }
+    .qrmsg-btn { font-size: 1em; }
+}
+</style>
+
+<div class="qrmsg-container">
+    <div class="qrmsg-title">
+        <i class="fas fa-envelope-open-text"></i> Gestione Messaggi QR
+    </div>
+    {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+        <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+    <form method="post">
+        <label class="qrmsg-label">Messaggio pubblico:</label>
+        <textarea name="pubblico" rows="3" class="qrmsg-textarea">{{ messaggio_pubblico }}</textarea>
+        <label class="qrmsg-label">Messaggio privato:</label>
+        <textarea name="privato" rows="3" class="qrmsg-textarea">{{ messaggio_privato }}</textarea>
+        <button type="submit" class="qrmsg-btn">
+            <i class="fas fa-save"></i> Salva modifiche
+        </button>
+    </form>
+    <a href="{{ url_for('user_dashboard') }}" class="qrmsg-link">
+        <i class="fas fa-arrow-left"></i> Torna alla dashboard
+    </a>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

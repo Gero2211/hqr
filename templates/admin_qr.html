@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Genera QR Code - Admin{% endblock %}
+{% block content %}
+<style>
+.admin-qr-outer {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
+.admin-qr-box {
+    width: 100%;
+    max-width: 600px;
+    background: #fff8ff;
+    padding: 2.2em 2em;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.admin-qr-title {
+    color: #A020F0;
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    font-weight: bold;
+    text-align: center;
+}
+.admin-qr-form label {
+    color: #800080;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+    font-size: 1.1em;
+    display: block;
+}
+.admin-qr-form textarea {
+    width: 100%;
+    border-radius: 7px;
+    border: 1.5px solid #A020F0;
+    font-size: 1.1em;
+    padding: 0.8em;
+    margin-bottom: 1.5em;
+    background: #fff;
+    color: #800080;
+    resize: vertical;
+    min-height: 80px;
+}
+.admin-qr-btn {
+    width: 100%;
+    padding: 0.9em 0;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.15em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.admin-qr-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.admin-qr-img {
+    margin-top: 2em;
+    text-align: center;
+}
+.admin-qr-img img {
+    max-width: 220px;
+    border: 2px solid #A020F0;
+    border-radius: 12px;
+}
+.admin-qr-link {
+    margin-top: 1em;
+    font-size: 1em;
+    color: #800080;
+    word-break: break-word;
+}
+.admin-qr-download {
+    margin-top: 1em;
+    display: inline-block;
+    padding: 0.6em 1.2em;
+    background: #800080;
+    color: #fff;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.admin-qr-download:hover {
+    background: #A020F0;
+}
+</style>
+
+<div class="admin-qr-outer">
+    <div class="admin-qr-box">
+        <div class="admin-qr-title">Crea un nuovo QR Code HouseQR</div>
+        {% if error %}
+            <div class="alert alert-error" style="width:100%; margin-bottom:1em;">{{ error }}</div>
+        {% endif %}
+        <form method="post" class="admin-qr-form" autocomplete="off">
+            <label for="pubblico">Messaggio pubblico</label>
+            <textarea name="pubblico" id="pubblico" placeholder="Inserisci il messaggio pubblico per il QR code..." required></textarea>
+            <button type="submit" class="admin-qr-btn">Genera QR</button>
+        </form>
+
+        {% if qr_img_data %}
+            <div class="admin-qr-img">
+                <img src="data:image/png;base64,{{ qr_img_data }}" alt="QR code generato">
+            </div>
+            <div class="admin-qr-link">
+                Link QR: <a href="{{ url_for('view_qr', qr_id=qr_id, _external=True) }}" target="_blank">{{ url_for('view_qr', qr_id=qr_id, _external=True) }}</a>
+            </div>
+            <a href="data:image/png;base64,{{ qr_img_data }}" download="qr_code_{{ qr_id }}.png" class="admin-qr-download">Scarica QR</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

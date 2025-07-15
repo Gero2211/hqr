@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Aggiungi QR code - HouseQR{% endblock %}
+{% block content %}
+<style>
+.addqr-outer {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+}
+.addqr-box {
+    width: 100%;
+    max-width: 400px;
+    background: #fff8ff;
+    padding: 2em 1.5em 1.7em 1.5em;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.addqr-title {
+    color: #A020F0;
+    font-size: 1.4em;
+    margin-bottom: 0.5em;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.addqr-desc {
+    color: #800080;
+    font-size: 1.08em;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+.addqr-input {
+    width: 100%;
+    padding: 0.7em 0.7em;
+    border-radius: 7px;
+    border: 1.5px solid #A020F0;
+    margin-bottom: 1.2em;
+    font-size: 1.3em;
+    letter-spacing: 0.18em;
+    text-align: center;
+    background: #fff;
+    color: #800080;
+    font-weight: bold;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s;
+}
+.addqr-input:focus {
+    border: 2px solid #FF0090;
+}
+.addqr-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6em;
+    font-size: 1em;
+    color: #800080;
+    margin-bottom: 1.2em;
+}
+.addqr-btn {
+    width: 100%;
+    padding: 0.8em 0;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+    transition: background 0.2s;
+}
+.addqr-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+@media (max-width: 600px) {
+    .addqr-outer { padding: 0 0.2em; }
+    .addqr-box { padding: 1.2em 0.5em 1.2em 0.5em; }
+    .addqr-title { font-size: 1.15em; }
+    .addqr-desc { font-size: 1em; }
+    .addqr-input { font-size: 1.1em; }
+    .addqr-btn { font-size: 1em; }
+}
+</style>
+<div class="addqr-outer">
+    <div class="addqr-box">
+        <div class="addqr-title"><i class="fas fa-qrcode"></i> Aggiungi un QR code</div>
+        <div class="addqr-desc">
+            Inserisci il <b>codice segreto di 12 cifre</b> che hai ricevuto con il tuo prodotto.
+        </div>
+        <form method="post" style="width:100%;">
+            <input type="text" name="codice_segreto" pattern="[A-Za-z0-9]{12}" required class="addqr-input" placeholder="Codice segreto">
+            <label class="addqr-checkbox-label">
+                <input type="checkbox" name="presa_visione" required>
+                Ho preso visione del fatto che il codice è univoco e può essere riscattato una sola volta.
+            </label>
+            <button type="submit" class="addqr-btn">Aggiungi</button>
+        </form>
+        {% if message %}
+            <div class="alert alert-success" style="margin-top:1em;">{{ message }}</div>
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-error" style="margin-top:1em;">{{ error }}</div>
+        {% endif %}
+    </div>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

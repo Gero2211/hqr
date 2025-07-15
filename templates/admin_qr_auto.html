@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Nuovo QR Code - Admin{% endblock %}
+{% block content %}
+<style>
+.admin-qr-outer {
+    min-height: 70vh;
+    display: flex; align-items: center; justify-content: center; margin-top: 40px;
+}
+.admin-qr-box {
+    width: 100%; max-width: 600px; background: #fff8ff; padding: 2.2em 2em;
+    border-radius: 16px; box-shadow: 0 2px 12px #d1b4e3; display: flex; flex-direction: column; align-items: center;
+}
+.admin-qr-title {
+    color: #A020F0; font-size: 1.5em; margin-bottom: 1em; font-weight: bold; text-align: center;
+}
+.admin-qr-info { margin-bottom: 2em; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.admin-qr-img { display: flex; flex-direction: column; align-items: center; }
+.admin-qr-img img { max-width: 220px; border: 2px solid #A020F0; border-radius: 12px; }
+.admin-qr-link, .admin-qr-secret {
+    margin-top: 1em; font-size: 1.08em; color: #800080; word-break: break-all; text-align: center;
+}
+.admin-qr-label {
+    font-weight: bold; color: #A020F0; margin-right: 0.3em;
+}
+.admin-qr-copy {
+    background: none; border: none; color: #A020F0; font-size: 1em; cursor: pointer; margin-left: 0.3em;
+}
+.admin-qr-copy:hover { color: #FF0090; }
+.admin-qr-download {
+    margin-top: 1.5em; display: inline-block; padding: 0.6em 1.2em; background: #800080;
+    color: #fff; border-radius: 7px; text-decoration: none; font-weight: bold; transition: background 0.2s;
+}
+.admin-qr-download:hover { background: #A020F0; }
+.admin-qr-btn-row {
+    display: flex; justify-content: center; gap: 1em; margin-top: 2em; flex-wrap: wrap;
+}
+.admin-qr-orders-btn {
+    background: #28a745;
+    color: #fff;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.6em 1.2em;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    display: inline-block;
+    transition: background 0.2s;
+    border: none;
+}
+.admin-qr-orders-btn:hover {
+    background: #218838;
+    color: #fff;
+}
+@media (max-width: 600px) {
+    .admin-qr-box { padding: 1.2em 0.5em; }
+    .admin-qr-img img { max-width: 140px; }
+}
+</style>
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert("Copiato negli appunti!");
+    }, function(err) {
+        alert("Errore nella copia: " + err);
+    });
+}
+</script>
+<div class="admin-qr-outer">
+    <div class="admin-qr-box">
+        <div class="admin-qr-title"><i class="fas fa-qrcode"></i> INTERFACCIA ADMIN </div>
+        <div class="admin-qr-btn-row">
+            <form method="post" style="display:inline;">
+                <button type="submit" class="admin-qr-download" style="background:#FF0090;">
+                    <i class="fas fa-plus"></i> Genera nuovo QR
+                </button>
+            </form>
+            <form action="{{ url_for('admin_qr_list') }}" method="get" style="display:inline;">
+                <button type="submit" class="admin-qr-download" style="background:#A020F0;">
+                    <i class="fas fa-table"></i> Visualizza tutti i QR
+                </button>
+            </form>
+            <form action="{{ url_for('admin_users') }}" method="get" style="display:inline;">
+                <button type="submit" class="admin-qr-download" style="background:#0090FF;margin-left:1em;">
+                    <i class="fas fa-users"></i> Visualizza tutti gli account
+                </button>
+            </form>
+            <form action="{{ url_for('admin_orders') }}" method="get" style="display:inline;">
+                <button type="submit" class="admin-qr-orders-btn">
+                    <i class="fas fa-list"></i> Visualizza ordini clienti
+                </button>
+            </form>
+        </div>
+        {% if qr_img_data %}
+            <div class="admin-qr-info">
+                <div class="admin-qr-img">
+                    <img src="data:image/png;base64,{{ qr_img_data }}" alt="QR code generato">
+                </div>
+                <div class="admin-qr-link">
+                    <span class="admin-qr-label">Link QR:</span>
+                    <a href="{{ qr_link }}" target="_blank">{{ qr_link }}</a>
+                    <button class="admin-qr-copy" onclick="copyToClipboard('{{ qr_link }}')" title="Copia link"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="admin-qr-secret">
+                    <span class="admin-qr-label">ID QR:</span> {{ qr_id }}
+                    <button class="admin-qr-copy" onclick="copyToClipboard('{{ qr_id }}')" title="Copia ID"><i class="fas fa-copy"></i></button>
+                    <br>
+                    <span class="admin-qr-label">Codice segreto:</span> {{ codice_segreto }}
+                    <button class="admin-qr-copy" onclick="copyToClipboard('{{ codice_segreto }}')" title="Copia codice"><i class="fas fa-copy"></i></button>
+                </div>
+                <div style="display:flex;justify-content:center;width:100%;">
+                    <a href="data:image/png;base64,{{ qr_img_data }}" download="qr_code_{{ qr_id }}.png" class="admin-qr-download"><i class="fas fa-download"></i> Scarica QR</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<!-- Font Awesome CDN for icons -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

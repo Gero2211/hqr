@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}HouseQR - Home{% endblock %}
+{% block content %}
+<style>
+.index-hero-title {
+    color: #A020F0;
+    letter-spacing: 2px;
+    font-size: 2.1em;
+    margin-top: 1.5em;
+    margin-bottom: 0.3em;
+    font-weight: bold;
+}
+.index-hero-subtitle {
+    color: #800080;
+    font-size: 1.2em;
+    margin-bottom: 2em;
+}
+.index-features-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2em;
+    margin: 2.5em auto 2em auto;
+    max-width: 420px;
+    background: linear-gradient(100deg, #f8fafd 60%, #f3e8ff 100%);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #e5e5e5;
+    padding: 2em 1em;
+}
+.index-feature {
+    font-size: 1.15em;
+    color: #A020F0;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.7em;
+}
+.index-btns {
+    margin-top: 2em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
+}
+@media (max-width: 600px) {
+    .index-hero-title { font-size: 1.3em; margin-top: 1em; }
+    .index-hero-subtitle { font-size: 1em; }
+    .index-features-box { padding: 1.2em 0.5em; max-width: 99vw; }
+    .index-feature { font-size: 1em; }
+    .index-btns { gap: 0.5em; }
+}
+</style>
+<div style="text-align:center;">
+    <div class="index-hero-title">Benvenuto su HouseQR</div>
+    <div class="index-hero-subtitle">
+        Il sistema intelligente per gestire messaggi e consegne al tuo campanello con QR code personalizzati.
+    </div>
+    <!-- Box con le 4 funzioni principali -->
+    <div class="index-features-box">
+        <div class="index-feature">
+            <i class="fas fa-qrcode"></i> Personalizza il tuo QR code
+        </div>
+        <div class="index-feature">
+            <i class="fas fa-user-lock"></i> Gestisci messaggi pubblici e privati
+        </div>
+        <div class="index-feature">
+            <i class="fas fa-bell"></i> Ricevi notifiche sulle scansioni
+        </div>
+        <div class="index-feature">
+            <i class="fas fa-key"></i> Recupera la password facilmente
+        </div>
+    </div>
+    <div class="index-btns">
+        {% if not session.get('user_id') %}
+            <a href="{{ url_for('register') }}" class="button">Registrati ora</a>
+            <a href="{{ url_for('login') }}" class="button" style="background:linear-gradient(90deg,#FF0090 60%,#A020F0 100%);">Accedi</a>
+        {% else %}
+            <a href="{{ url_for('user_dashboard') }}" class="button">Vai alla Dashboard</a>
+        {% endif %}
+    </div>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

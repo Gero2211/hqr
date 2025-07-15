@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Registrazione - HouseQR{% endblock %}
+{% block content %}
+<style>
+.register-container {
+    max-width: 500px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.2em 1.5em 1.2em;
+}
+.register-title {
+    text-align: center;
+    color: #A020F0;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.register-form-row {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+.register-form-row > div {
+    flex: 1 1 130px;
+}
+.register-form label {
+    font-weight: bold;
+    color: #800080;
+}
+.register-form-input {
+    width: 100%;
+    padding: 0.7em;
+    border-radius: 5px;
+    border: 1px solid #E5E5E5;
+    font-size: 1em;
+    margin-bottom: 1em;
+    background: #fff;
+    color: #800080;
+    box-sizing: border-box;
+}
+.register-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.8em 0;
+    margin-top: 0.5em;
+    transition: background 0.2s;
+}
+.register-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.register-login {
+    text-align: center;
+    margin-top: 1.2em;
+    font-size: 1em;
+}
+.register-login a {
+    color: #A020F0;
+    font-weight: bold;
+    text-decoration: underline;
+}
+@media (max-width: 600px) {
+    .register-container { padding: 1em 0.3em; }
+    .register-title { font-size: 1.08em; }
+    .register-form-row { flex-direction: column; gap: 0; }
+    .register-btn { font-size: 1em; }
+}
+</style>
+<div class="register-container">
+    <div class="register-title"><i class="fas fa-user-plus"></i> Crea il tuo account HouseQR</div>
+    <form method="post" class="register-form" autocomplete="off">
+        <div class="register-form-row">
+            <div>
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" id="nome" required class="register-form-input">
+            </div>
+            <div>
+                <label for="cognome">Cognome</label>
+                <input type="text" name="cognome" id="cognome" required class="register-form-input">
+            </div>
+        </div>
+        <label for="indirizzo">Indirizzo</label>
+        <input type="text" name="indirizzo" id="indirizzo" required class="register-form-input">
+        <label for="telefono">Telefono</label>
+        <input type="text" name="telefono" id="telefono" required class="register-form-input">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required class="register-form-input">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required class="register-form-input">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required class="register-form-input">
+        <button type="submit" class="register-btn">Registrati</button>
+    </form>
+    <div class="register-login">
+        <span>Hai già un account?</span>
+        <a href="{{ url_for('login') }}">Accedi</a>
+    </div>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

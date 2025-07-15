@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Accesso zona privata QR{% endblock %}
+{% block content %}
+<style>
+.zone-login-outer {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
+.zone-login-box {
+    width: 100%;
+    max-width: 400px;
+    background: #fff8ff;
+    padding: 2em 1.5em 2em 1.5em;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.zone-login-title {
+    color: #A020F0;
+    font-size: 1.25em;
+    margin-bottom: 0.7em;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.zone-login-desc {
+    color: #800080;
+    font-size: 1.05em;
+    margin-bottom: 1.2em;
+    text-align: center;
+}
+.zone-login-input-wrap {
+    width: 100%;
+    position: relative;
+    margin-bottom: 1em;
+}
+.zone-login-input {
+    width: 100%;
+    padding: 0.7em 2.5em 0.7em 0.7em;
+    border-radius: 7px;
+    border: 1.5px solid #A020F0;
+    font-size: 1.1em;
+    letter-spacing: 0.12em;
+    text-align: center;
+    background: #fff;
+    color: #800080;
+    font-weight: bold;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s;
+}
+.zone-login-input:focus {
+    border: 2px solid #FF0090;
+}
+.zone-login-show {
+    position: absolute;
+    right: 0.7em;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #A020F0;
+    font-size: 1.15em;
+    background: none;
+    border: none;
+    padding: 0;
+}
+.zone-login-btn {
+    width: 100%;
+    padding: 0.8em 0;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+    transition: background 0.2s;
+}
+.zone-login-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+@media (max-width: 500px) {
+    .zone-login-box { padding: 1.2em 0.5em 1.2em 0.5em; }
+    .zone-login-title { font-size: 1.08em; }
+    .zone-login-btn { font-size: 1em; }
+}
+</style>
+<div class="zone-login-outer">
+    <div class="zone-login-box">
+        <div class="zone-login-title"><i class="fas fa-lock"></i> Zona privata: {{ zone_name }}</div>
+        <div class="zone-login-desc">
+            Inserisci la <b>password</b> per accedere a questa area riservata.<br>
+            <span style="font-size:0.97em;color:#A020F0;">Accesso consentito solo a chi è autorizzato.</span>
+        </div>
+        <form method="post" style="width:100%;">
+            <div class="zone-login-input-wrap">
+                <input type="password" name="password" id="password" class="zone-login-input" placeholder="Password zona" required autocomplete="off">
+                <button type="button" class="zone-login-show" onclick="togglePassword()" aria-label="Mostra/Nascondi password">
+                    <span id="eye-icon">👁️</span>
+                </button>
+            </div>
+            <button type="submit" class="zone-login-btn">Accedi</button>
+            {% if error %}
+                <div class="alert alert-error" style="margin-top:1em;">{{ error }}</div>
+            {% endif %}
+        </form>
+        <div style="margin-top:1.5em;text-align:center;font-size:0.98em;color:#800080;">
+            <a href="{{ url_for('view_qr', qr_id=qr_id) }}" style="color:#A020F0;text-decoration:underline;">Torna alla zona pubblica</a>
+        </div>
+    </div>
+</div>
+<script>
+function togglePassword() {
+    var input = document.getElementById("password");
+    var eye = document.getElementById("eye-icon");
+    if (input.type === "password") {
+        input.type = "text";
+        eye.textContent = "🙈";
+    } else {
+        input.type = "password";
+        eye.textContent = "👁️";
+    }
+}
+</script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

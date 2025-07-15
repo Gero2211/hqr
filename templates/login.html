@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Login - HouseQR{% endblock %}
+{% block content %}
+<style>
+.login-container {
+    max-width: 400px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.2em 1.5em 1.2em;
+}
+.login-title {
+    text-align: center;
+    color: #A020F0;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.login-form label {
+    font-weight: bold;
+    color: #800080;
+}
+.login-form-input {
+    width: 100%;
+    padding: 0.7em;
+    border-radius: 5px;
+    border: 1px solid #E5E5E5;
+    font-size: 1em;
+    margin-bottom: 1em;
+    background: #fff;
+    color: #800080;
+    box-sizing: border-box;
+}
+.login-form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+}
+.login-form-icon {
+    margin-right: 0.5em;
+    color: #A020F0;
+    font-size: 1.1em;
+}
+.login-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.8em 0;
+    margin-top: 0.5em;
+    transition: background 0.2s;
+}
+.login-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.login-links {
+    margin-top: 1em;
+    text-align: center;
+    font-size: 1em;
+}
+.login-links a {
+    color: #A020F0;
+    text-decoration: underline;
+}
+.login-register {
+    text-align: center;
+    margin-top: 1.2em;
+    font-size: 1em;
+}
+.login-register a {
+    color: #FF0090;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.alert {
+    border-radius: 8px;
+    padding: 1em 1em;
+    font-size: 1.05em;
+    margin-bottom: 1.2em;
+    text-align: center;
+    font-weight: bold;
+}
+.alert-error {
+    background: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+.alert-success {
+    background: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+@media (max-width: 500px) {
+    .login-container { padding: 1em 0.3em; }
+    .login-title { font-size: 1.08em; }
+    .login-btn { font-size: 1em; }
+}
+</style>
+<div class="login-container">
+    <div class="login-title"><i class="fas fa-sign-in-alt"></i> Accedi a HouseQR</div>
+    {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% elif message %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endif %}
+    <form method="post" class="login-form" autocomplete="on">
+        <label for="identifier">Username o Email</label>
+        <div class="login-form-group">
+            <span class="login-form-icon"><i class="fas fa-user"></i></span>
+            <input type="text" name="identifier" id="identifier" required class="login-form-input" autocomplete="username">
+        </div>
+        <label for="password">Password</label>
+        <div class="login-form-group">
+            <span class="login-form-icon"><i class="fas fa-lock"></i></span>
+            <input type="password" name="password" id="password" required class="login-form-input" autocomplete="current-password">
+        </div>
+        <button type="submit" class="login-btn">Accedi</button>
+        <div class="login-links">
+            <a href="{{ url_for('forgot_password') }}">Password dimenticata?</a>
+        </div>
+    </form>
+    <div class="login-register">
+        <span>Non hai un account?</span>
+        <a href="{{ url_for('register') }}">Registrati</a>
+    </div>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

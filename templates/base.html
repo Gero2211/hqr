@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}HouseQR{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --main-magenta: #A020F0;
+            --main-pink: #FF0090;
+            --main-purple: #800080;
+            --main-white: #FFFFFF;
+            --main-gray: #F8FAFC;
+            --main-gray2: #E5E5E5;
+        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin:0; background:var(--main-gray); }
+        .navbar { background:linear-gradient(90deg, var(--main-magenta) 60%, var(--main-pink) 100%); color:#fff; padding:1em 2em; display:flex; justify-content:space-between; align-items:center; position:relative; }
+        .navbar-logo { display:flex; align-items:center; }
+        .navbar-logo img { height:44px; margin-right:1em; }
+        .navbar-links { display:flex; gap:1em; align-items:center; }
+        .navbar a { color:#fff; text-decoration:none; font-weight:bold; letter-spacing:1px; }
+        .navbar a.active, .navbar a:hover { text-decoration:underline; }
+        .container { max-width:900px; margin:2em auto; background:var(--main-white); padding:2em; border-radius:12px; box-shadow:0 2px 12px #d1b4e3; }
+        .footer { text-align:center; margin-top:2em; color:#800080; font-size:0.95em; }
+        .alert { padding:1em; border-radius:5px; margin-bottom:1em; }
+        .alert-success { background:#e6f7f2; color:#0f5132; }
+        .alert-error { background:#f8d7da; color:#842029; }
+        .alert-warning { background:#fff3cd; color:#664d03; }
+        .alert-info { background:#f3e8ff; color:#800080; }
+        .button, button[type="submit"] {
+            background:linear-gradient(90deg, var(--main-magenta) 60%, var(--main-pink) 100%);
+            color:#fff; border:none; border-radius:6px; padding:0.8em 1.5em; font-weight:bold; font-size:1.05em;
+            cursor:pointer; margin:0.5em 0;
+            box-shadow:0 2px 8px #e5e5e5;
+            transition: background 0.2s;
+        }
+        .button:hover, button[type="submit"]:hover {
+            background:linear-gradient(90deg, var(--main-pink) 60%, var(--main-magenta) 100%);
+        }
+        input, select, textarea {
+            border:1px solid var(--main-gray2);
+            border-radius:5px;
+            padding:0.7em;
+            margin-bottom:1em;
+            width:100%;
+            font-size:1em;
+        }
+        label { font-weight:bold; color:var(--main-purple); }
+
+        /* Hamburger menu styles */
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+            margin-left: 1em;
+        }
+        @media (max-width:800px) {
+            .container { padding:1em; }
+        }
+        @media (max-width:600px) {
+            .container { padding:0.5em; }
+            .navbar { flex-direction:column; align-items:flex-start; padding:1em 0.7em; }
+            .navbar-logo img { height:36px; }
+            .navbar-links {
+                flex-direction:column;
+                width:100%;
+                gap:0.5em;
+                display:none;
+                margin-top:0.8em;
+            }
+            .navbar-links.open { display:flex; }
+            .navbar-toggle { display:block; }
+        }
+    </style>
+    <script>
+    // Hamburger menu toggle
+    function toggleNavbar() {
+        var links = document.getElementById('navbar-links');
+        if (links.classList.contains('open')) {
+            links.classList.remove('open');
+        } else {
+            links.classList.add('open');
+        }
+    }
+    </script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="HouseQR Logo">
+            </a>
+            <a href="{{ url_for('index') }}" style="font-size:1.6em; letter-spacing:2px;">HOUSEQR</a>
+        </div>
+        <button class="navbar-toggle" onclick="toggleNavbar()" aria-label="Apri menu">&#9776;</button>
+        <div class="navbar-links" id="navbar-links">
+            <a href="{{ url_for('shop') }}"><i class="fas fa-shopping-cart"></i> Shop</a>
+            <a href="{{ url_for('chi_siamo') }}">Chi siamo</a>
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+                {% if session.get('is_admin') %}
+                    <a href="{{ url_for('admin_qr') }}">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Registrati</a>
+            {% endif %}
+            <a href="{{ url_for('privacy') }}">Privacy</a>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    <footer class="footer">
+        &copy; {{ 2025 }} HouseQR. Tutti i diritti riservati. | <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+    </footer>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+</body>
+</html>

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Pagamento completato{% endblock %}
+{% block content %}
+<style>
+.order-success-container {
+    max-width: 500px;
+    margin: 3em auto;
+    background: #eaf4fd;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2.2em 1.5em 2em 1.5em;
+    text-align: center;
+}
+.order-success-icon {
+    font-size: 2.5em;
+    color: #28a745;
+    margin-bottom: 0.3em;
+}
+.order-success-title {
+    color: #28a745;
+    font-size: 1.45em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+.order-id {
+    color: #0090FF;
+    font-size: 1.1em;
+    margin-bottom: 1.3em;
+    font-family: 'Fira Mono', monospace;
+    word-break: break-all;
+}
+.order-summary-table {
+    width: 100%;
+    margin: 1.2em 0 1.5em 0;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px #d1b4e3;
+}
+.order-summary-table th, .order-summary-table td {
+    padding: 0.7em;
+    font-size: 1.04em;
+    text-align: left;
+}
+.order-summary-table th {
+    background: #A020F0;
+    color: #fff;
+}
+.order-summary-table tr:nth-child(even) {
+    background: #f3e8ff;
+}
+.order-total-row td {
+    font-weight: bold;
+    color: #A020F0;
+    border-top: 2px solid #A020F0;
+}
+.back-shop-btn {
+    margin-top: 1.7em;
+    padding: 0.7em 2em;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-block;
+}
+.back-shop-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.order-address {
+    color: #800080;
+    font-size: 1.05em;
+    background: #fff;
+    border-radius: 7px;
+    padding: 0.7em 1em;
+    margin-bottom: 1em;
+    box-shadow: 0 1px 4px #d1b4e3;
+    text-align: left;
+    word-break: break-word;
+}
+@media (max-width: 600px) {
+    .order-success-container { padding: 1em 0.3em; }
+    .order-success-title { font-size: 1.1em; }
+    .order-summary-table th, .order-summary-table td { font-size: 0.97em; padding: 0.5em; }
+    .order-address { font-size: 0.98em; padding: 0.6em 0.6em; }
+    .back-shop-btn { font-size: 1em; padding: 0.6em 1.2em; }
+}
+</style>
+
+<div class="order-success-container">
+    <div class="order-success-icon">
+        <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="order-success-title">Pagamento completato!</div>
+    <div style="color:#800080;margin-bottom:0.7em;">
+        Grazie per il tuo acquisto su HouseQR.<br>
+        Riceverai una conferma via email a breve.
+    </div>
+    <div class="order-id">
+        <b>Codice ordine:</b> {{ order_id }}
+    </div>
+    <div class="order-address">
+        <b>Indirizzo di spedizione:</b><br>
+        {{ indirizzo }}
+    </div>
+    <table class="order-summary-table">
+        <thead>
+            <tr>
+                <th>Prodotto</th>
+                <th>Quantità</th>
+                <th>Totale</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in prodotti %}
+            <tr>
+                <td>{{ p.nome }}</td>
+                <td>{{ p.quantita }}</td>
+                <td>{{ (p.prezzo * p.quantita)|round(2) }} €</td>
+            </tr>
+            {% endfor %}
+            <tr class="order-total-row">
+                <td colspan="2">Totale ordine</td>
+                <td>{{ totale|round(2) }} €</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ url_for('shop') }}" class="back-shop-btn">
+        <i class="fas fa-arrow-left"></i> Torna allo Shop
+    </a>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

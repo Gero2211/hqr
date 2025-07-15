@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Dettaglio ordine {{ ordine.order_id }}{% endblock %}
+{% block content %}
+<style>
+.order-detail-container {
+    max-width: 600px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.5em;
+}
+.order-detail-title {
+    color: #A020F0;
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    text-align: center;
+}
+.order-detail-table {
+    width: 100%;
+    margin-bottom: 1.5em;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px #d1b4e3;
+}
+.order-detail-table th, .order-detail-table td {
+    padding: 0.7em;
+    font-size: 1.04em;
+    text-align: left;
+}
+.order-detail-table th {
+    background: #A020F0;
+    color: #fff;
+}
+.order-detail-table tr:nth-child(even) {
+    background: #f3e8ff;
+}
+.order-status {
+    font-weight: bold;
+    color: #fff;
+    border-radius: 7px;
+    padding: 0.2em 0.8em;
+    display: inline-block;
+    font-size: 0.98em;
+}
+.status-ricevuto { background: #6c757d; }
+.status-in-elaborazione { background: #ffc107; color: #333; }
+.status-spedito { background: #0090FF; }
+.status-completato { background: #28a745; }
+.order-detail-label { color: #A020F0; font-weight: bold; }
+.order-detail-value { color: #800080; }
+</style>
+<div class="order-detail-container">
+    <div class="order-detail-title">
+        <i class="fas fa-list"></i> Dettaglio ordine {{ ordine.order_id }}
+    </div>
+    <div style="margin-bottom:1em;">
+        <span class="order-detail-label">Data:</span>
+        <span class="order-detail-value">{{ ordine.data }}</span>
+    </div>
+    <div style="margin-bottom:1em;">
+        <span class="order-detail-label">Email cliente:</span>
+        <span class="order-detail-value">{{ ordine.email or 'N/A' }}</span>
+    </div>
+    <div style="margin-bottom:1em;">
+        <span class="order-detail-label">Indirizzo:</span>
+        <span class="order-detail-value">{{ ordine.indirizzo }}</span>
+    </div>
+    <div style="margin-bottom:1em;">
+        <span class="order-detail-label">Stato:</span>
+        <form method="post" style="display:inline;">
+            <select name="status" class="order-status status-{{ ordine.status|replace(' ', '-') }}" onchange="this.form.submit()">
+                {% for s in ['ricevuto', 'in elaborazione', 'spedito', 'completato'] %}
+                    <option value="{{ s }}" {% if ordine.status == s %}selected{% endif %}>{{ s|capitalize }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    <table class="order-detail-table">
+        <thead>
+            <tr>
+                <th>Prodotto</th>
+                <th>Quantità</th>
+                <th>Totale</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in ordine.prodotti %}
+            <tr>
+                <td>{{ p.nome }}</td>
+                <td>{{ p.quantita }}</td>
+                <td>{{ (p.prezzo * p.quantita)|round(2) }} €</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2" style="text-align:right;font-weight:bold;">Totale ordine</td>
+                <td style="font-weight:bold;color:#A020F0;">{{ ordine.totale|round(2) }} €</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ url_for('admin_orders') }}" class="back-shop-btn" style="margin-top:1em;">
+        <i class="fas fa-arrow-left"></i> Torna alla lista ordini
+    </a>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

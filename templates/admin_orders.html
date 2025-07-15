@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block title %}Ordini clienti - Admin HouseQR{% endblock %}
+{% block content %}
+<style>
+.admin-orders-dashboard {
+    max-width: 900px;
+    margin: 2em auto 1.5em auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2em;
+    justify-content: space-between;
+}
+.dashboard-card {
+    flex: 1 1 180px;
+    min-width: 180px;
+    background: linear-gradient(90deg, #fff8ff 60%, #eaf4fd 100%);
+    border-radius: 13px;
+    box-shadow: 0 2px 8px #e0cbee;
+    padding: 1.1em 1.2em 1em 1.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.dashboard-card .dash-label {
+    font-size: 0.99em;
+    color: #A020F0;
+    font-weight: bold;
+    margin-bottom: 0.2em;
+    text-align: center;
+}
+.dashboard-card .dash-value {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #800080;
+    margin-bottom: 0.1em;
+}
+.dashboard-card .dash-icon {
+    font-size: 1.5em;
+    margin-bottom: 0.2em;
+}
+.dashboard-card.dash-status-ricevuto { border-left: 6px solid #6c757d; }
+.dashboard-card.dash-status-in-elaborazione { border-left: 6px solid #ffc107; }
+.dashboard-card.dash-status-spedito { border-left: 6px solid #0090FF; }
+.dashboard-card.dash-status-completato { border-left: 6px solid #28a745; }
+.dashboard-card.dash-total { border-left: 6px solid #A020F0; }
+.dashboard-card.dash-earning { border-left: 6px solid #FF0090; }
+@media (max-width: 900px) {
+    .admin-orders-dashboard { flex-wrap: wrap; gap: 0.7em; }
+    .dashboard-card { min-width: 140px; padding: 0.9em 0.7em; }
+}
+.filter-form {
+    max-width: 900px;
+    margin: 0 auto 1em auto;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: flex-end;
+}
+.filter-form label { font-weight: bold; color: #A020F0; }
+.filter-form select {
+    border-radius: 6px;
+    border: 1px solid #A020F0;
+    padding: 0.3em 0.8em;
+    font-size: 1em;
+    background: #fff;
+    color: #800080;
+}
+.admin-orders-table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 2em auto;
+    border-collapse: separate;
+    border-spacing: 0 0.5em;
+    background: transparent;
+}
+.admin-orders-table th, .admin-orders-table td {
+    padding: 0.7em 1em;
+    text-align: left;
+}
+.admin-orders-table th {
+    background: #A020F0;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 7px 7px 0 0;
+}
+.admin-orders-table tr {
+    background: #fff;
+    box-shadow: 0 1px 6px #d1b4e3;
+    border-radius: 8px;
+}
+.admin-orders-table tr:hover {
+    background: #f3e8ff;
+    box-shadow: 0 2px 12px #A020F0;
+}
+.order-status {
+    font-weight: bold;
+    color: #fff;
+    border-radius: 12px;
+    padding: 0.3em 1em;
+    display: inline-block;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 4px #e5e5e5;
+}
+.status-ricevuto { background: #6c757d; }
+.status-in-elaborazione { background: #ffc107; color: #333; }
+.status-spedito { background: #0090FF; }
+.status-completato { background: #28a745; }
+a.order-link { color: #A020F0; font-weight: bold; text-decoration: none; }
+a.order-link:hover { text-decoration: underline; }
+@media (max-width: 700px) {
+    .admin-orders-dashboard, .filter-form, .admin-orders-table { max-width: 99vw; }
+    .admin-orders-table th, .admin-orders-table td { padding: 0.5em; font-size: 0.98em; }
+}
+</style>
+
+<div class="admin-orders-dashboard">
+    <div class="dashboard-card dash-total">
+        <div class="dash-icon"><i class="fas fa-list"></i></div>
+        <div class="dash-label">Totale ordini</div>
+        <div class="dash-value">{{ totale_ordini }}</div>
+    </div>
+    <div class="dashboard-card dash-status-ricevuto">
+        <div class="dash-icon"><i class="fas fa-inbox"></i></div>
+        <div class="dash-label">Ricevuti</div>
+        <div class="dash-value">{{ ordini_per_stato['ricevuto'] if 'ricevuto' in ordini_per_stato else 0 }}</div>
+    </div>
+    <div class="dashboard-card dash-status-in-elaborazione">
+        <div class="dash-icon"><i class="fas fa-cogs"></i></div>
+        <div class="dash-label">In elaborazione</div>
+        <div class="dash-value">{{ ordini_per_stato['in elaborazione'] if 'in elaborazione' in ordini_per_stato else 0 }}</div>
+    </div>
+    <div class="dashboard-card dash-status-spedito">
+        <div class="dash-icon"><i class="fas fa-truck"></i></div>
+        <div class="dash-label">Spediti</div>
+        <div class="dash-value">{{ ordini_per_stato['spedito'] if 'spedito' in ordini_per_stato else 0 }}</div>
+    </div>
+    <div class="dashboard-card dash-status-completato">
+        <div class="dash-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="dash-label">Completati</div>
+        <div class="dash-value">{{ ordini_per_stato['completato'] if 'completato' in ordini_per_stato else 0 }}</div>
+    </div>
+    <div class="dashboard-card dash-earning">
+        <div class="dash-icon"><i class="fas fa-euro-sign"></i></div>
+        <div class="dash-label">Guadagno potenziale</div>
+        <div class="dash-value">{{ guadagno_totale|round(2) }} €</div>
+    </div>
+    <div class="dashboard-card dash-earning">
+        <div class="dash-icon"><i class="fas fa-piggy-bank"></i></div>
+        <div class="dash-label">Guadagno reale</div>
+        <div class="dash-value">{{ guadagno_completati|round(2) }} €</div>
+    </div>
+</div>
+
+<h2 style="color:#A020F0;text-align:center;margin-top:1.5em;">Ordini clienti</h2>
+<form method="get" class="filter-form">
+    <label for="status">Filtra per stato:</label>
+    <select name="status" id="status" onchange="this.form.submit()">
+        <option value="tutti" {% if status_filter == 'tutti' %}selected{% endif %}>Tutti</option>
+        <option value="ricevuto" {% if status_filter == 'ricevuto' %}selected{% endif %}>Ricevuto</option>
+        <option value="in elaborazione" {% if status_filter == 'in elaborazione' %}selected{% endif %}>In elaborazione</option>
+        <option value="spedito" {% if status_filter == 'spedito' %}selected{% endif %}>Spedito</option>
+        <option value="completato" {% if status_filter == 'completato' %}selected{% endif %}>Completato</option>
+    </select>
+    <label for="order_by">Ordina per:</label>
+    <select name="order_by" id="order_by" onchange="this.form.submit()">
+        <option value="status" {% if order_by == 'status' %}selected{% endif %}>Stato</option>
+        <option value="data_desc" {% if order_by == 'data_desc' %}selected{% endif %}>Data (dal più recente)</option>
+    </select>
+</form>
+<table class="admin-orders-table">
+    <thead>
+        <tr>
+            <th>Codice ordine</th>
+            <th>Data</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ordine in ordini %}
+        <tr>
+            <td>
+                <a href="{{ url_for('admin_order_detail', order_id=ordine.order_id) }}" class="order-link">
+                    {{ ordine.order_id }}
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('admin_order_detail', order_id=ordine.order_id) }}" class="order-link" style="color:#800080;">
+                    {{ ordine.data }}
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('admin_order_detail', order_id=ordine.order_id) }}">
+                    <span class="order-status status-{{ ordine.status|replace(' ', '-') }}">{{ ordine.status|capitalize }}</span>
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" style="color:#800080;text-align:center;">Nessun ordine trovato.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

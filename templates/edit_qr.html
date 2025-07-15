@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+{% block title %}Modifica QR - HouseQR{% endblock %}
+{% block content %}
+<style>
+.editqr-outer {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
+.editqr-box {
+    width: 100%;
+    max-width: 500px;
+    background: #fff8ff;
+    padding: 2.2em 1.7em 2em 1.7em;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.editqr-title {
+    color: #A020F0;
+    font-size: 1.35em;
+    margin-bottom: 0.7em;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.editqr-form label {
+    color: #800080;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+    display: block;
+    font-size: 1.07em;
+}
+.editqr-form textarea,
+.editqr-form input[type="password"] {
+    width: 100%;
+    border-radius: 7px;
+    border: 1.5px solid #A020F0;
+    font-size: 1.1em;
+    padding: 0.7em;
+    margin-bottom: 1.2em;
+    background: #fff;
+    color: #800080;
+    font-weight: normal;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s;
+    resize: vertical;
+}
+.editqr-form textarea:focus,
+.editqr-form input[type="password"]:focus {
+    border: 2px solid #FF0090;
+}
+.editqr-btn {
+    width: 100%;
+    padding: 0.8em 0;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+    transition: background 0.2s;
+}
+.editqr-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.editqr-note {
+    color: #800080;
+    font-size: 0.97em;
+    margin-top: 1em;
+    text-align: center;
+}
+.zone-private-wrapper {
+    margin-top: 2em;
+    width: 100%;
+}
+.zone-private-title {
+    color: #A020F0;
+    text-align: center;
+    font-size: 1.18em;
+    font-weight: bold;
+    margin-bottom: 0.7em;
+    letter-spacing: 1px;
+}
+.zone-accordion {
+    width: 100%;
+}
+.zone-accordion-item {
+    border: 1.5px solid #A020F0;
+    border-radius: 8px;
+    margin-bottom: 0.7em;
+    background: #f3e8ff;
+    box-shadow: 0 1px 4px #e5e5e5;
+    overflow: hidden;
+}
+.zone-accordion-header {
+    cursor: pointer;
+    padding: 0.7em 1em;
+    background: #A020F0;
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.08em;
+    letter-spacing: 1px;
+    border: none;
+    outline: none;
+    transition: background 0.2s;
+}
+.zone-accordion-header:hover {
+    background: #800080;
+}
+.zone-accordion-arrow {
+    font-size: 1.2em;
+    transition: transform 0.2s;
+}
+.zone-accordion-content {
+    padding: 1em 1em 0.7em 1em;
+    background: #faf0ff;
+    display: none;
+    animation: fadeIn 0.2s;
+}
+.zone-accordion-content.open {
+    display: block;
+}
+.zone-accordion-content label {
+    color: #800080;
+    font-weight: bold;
+    font-size: 0.98em;
+    margin-bottom: 0.1em;
+}
+.zone-accordion-content input[type="text"],
+.zone-accordion-content input[type="password"],
+.zone-accordion-content textarea {
+    width: 100%;
+    border-radius: 7px;
+    border: 1.5px solid #A020F0;
+    font-size: 1em;
+    padding: 0.4em 0.5em;
+    background: #fff;
+    color: #800080;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s;
+    margin-bottom: 0.7em;
+}
+.zone-accordion-content input:focus,
+.zone-accordion-content textarea:focus {
+    border: 2px solid #FF0090;
+}
+.zone-accordion-content textarea {
+    resize: vertical;
+    min-height: 38px;
+    max-height: 90px;
+}
+.zone-accordion-new {
+    border: 1.5px solid #800080;
+    background: #faf0ff;
+}
+@media (max-width: 600px) {
+    .zone-accordion-header { font-size: 1em; }
+    .zone-accordion-content { padding: 0.7em 0.5em 0.5em 0.5em; }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+</style>
+
+<div class="editqr-outer">
+    <div class="editqr-box">
+        <div class="editqr-title">Modifica QR code</div>
+        <form method="post" class="editqr-form" style="width:100%;">
+            <label for="pubblico">Messaggio pubblico</label>
+            <textarea name="pubblico" id="pubblico" rows="3" required>{{ qr.pubblico }}</textarea>
+            <div class="zone-private-wrapper">
+                <div class="zone-private-title">
+                    Zone Private (max {{ max_zones }})
+                </div>
+                <div class="zone-accordion" id="zone-accordion">
+                    {% for zone in zones %}
+                    <div class="zone-accordion-item">
+                        <div class="zone-accordion-header" onclick="toggleAccordion(this)">
+                            <span>{{ zone[1] }}</span>
+                            <span class="zone-accordion-arrow">&#9660;</span>
+                        </div>
+                        <div class="zone-accordion-content">
+                            <input type="hidden" name="zone_id[]" value="{{ zone[0] }}">
+                            <label>Nome</label>
+                            <input type="text" name="zone_name[]" value="{{ zone[1] }}" required>
+                            <label style="font-size:0.95em;">Password <span style="color:#A020F0;">(vuoto = non cambia)</span></label>
+                            <input type="password" name="zone_password[]" placeholder="Nuova password">
+                            <label>Messaggio</label>
+                            <textarea name="zone_message[]" required>{{ zone[2] }}</textarea>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if not max_zones_reached %}
+                    <div class="zone-accordion-item zone-accordion-new">
+                        <div class="zone-accordion-header" onclick="toggleAccordion(this)">
+                            <span>+ Nuova zona privata</span>
+                            <span class="zone-accordion-arrow">&#9660;</span>
+                        </div>
+                        <div class="zone-accordion-content">
+                            <input type="hidden" name="zone_id[]" value="new">
+                            <label>Nome zona</label>
+                            <input type="text" name="zone_name[]" placeholder="Nome zona">
+                            <label>Password</label>
+                            <input type="password" name="zone_password[]" placeholder="Password">
+                            <label>Messaggio</label>
+                            <textarea name="zone_message[]" placeholder="Messaggio riservato"></textarea>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if max_zones_reached %}
+                    <div style="color:#FF0090;text-align:center;margin-top:0.7em;font-weight:bold;">
+                        Hai raggiunto il numero massimo di zone private per questo QR ({{ max_zones }}).
+                    </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="editqr-btn">Salva modifiche</button>
+            {% if error %}
+                <div class="alert alert-error" style="margin-top:1em;">{{ error }}</div>
+            {% endif %}
+        </form>
+        <div class="editqr-note">
+            Tutti i campi sono obbligatori.<br>
+            Per cambiare la password di una zona, inserisci quella nuova.<br>
+            Per mantenere la password attuale, lascia vuoto il campo password.
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleAccordion(header) {
+    const content = header.nextElementSibling;
+    const arrow = header.querySelector('.zone-accordion-arrow');
+    if(content.classList.contains('open')) {
+        content.classList.remove('open');
+        arrow.style.transform = 'rotate(0deg)';
+    } else {
+        // Chiudi tutte le altre
+        document.querySelectorAll('.zone-accordion-content').forEach(el => {
+            el.classList.remove('open');
+            el.previousElementSibling.querySelector('.zone-accordion-arrow').style.transform = 'rotate(0deg)';
+        });
+        content.classList.add('open');
+        arrow.style.transform = 'rotate(180deg)';
+    }
+}
+</script>
+{% endblock %}

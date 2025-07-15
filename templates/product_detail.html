@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ prodotto[1] }} - Shop HouseQR{% endblock %}
+{% block content %}
+<style>
+.product-detail-container {
+    max-width: 470px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.5em 2em 1.5em;
+    text-align: center;
+}
+.product-detail-img {
+    max-width: 150px;
+    max-height: 150px;
+    margin-bottom: 1em;
+    border-radius: 10px;
+    object-fit: contain;
+    background: #fff;
+    box-shadow: 0 2px 8px #e5e5e5;
+}
+.product-detail-name {
+    color: #A020F0;
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+}
+.product-detail-price {
+    color: #0090FF;
+    font-size: 1.15em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.product-detail-desc {
+    color: #800080;
+    font-size: 1.08em;
+    margin-bottom: 1.5em;
+}
+.product-detail-btns {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2em;
+}
+.product-detail-add-btn, .product-detail-cart-btn {
+    padding: 0.7em 1.5em;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-bottom: 0.5em;
+    display: inline-block;
+}
+.product-detail-add-btn:hover, .product-detail-cart-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.product-detail-cart-btn { background: #0090FF; }
+.product-detail-cart-btn:hover { background: #A020F0; }
+@media (max-width: 500px) {
+    .product-detail-container { padding: 1.2em 0.5em 1.2em 0.5em; }
+    .product-detail-name { font-size: 1.1em; }
+    .product-detail-btns { flex-direction: column; gap: 0.5em; }
+}
+</style>
+<div class="product-detail-container">
+    <img src="{{ url_for('static', filename='shop/' ~ prodotto[4]) }}" alt="{{ prodotto[1] }}" class="product-detail-img">
+    <div class="product-detail-name">{{ prodotto[1] }}</div>
+    <div class="product-detail-price">{{ prodotto[3]|round(2) }} €</div>
+    <div class="product-detail-desc">{{ prodotto[2] }}</div>
+    <div class="product-detail-btns">
+        <a href="{{ url_for('add_to_cart', product_id=prodotto[0]) }}" class="product-detail-add-btn">
+            <i class="fas fa-cart-plus"></i> Aggiungi al carrello
+        </a>
+        <a href="{{ url_for('view_cart') }}" class="product-detail-cart-btn">
+            <i class="fas fa-arrow-right"></i> Vai al checkout
+        </a>
+    </div>
+    <div style="margin-top:1.5em;">
+        <a href="{{ url_for('shop') }}" style="color:#A020F0;text-decoration:underline;"><i class="fas fa-arrow-left"></i> Torna allo shop</a>
+    </div>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

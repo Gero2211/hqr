@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}Shop HouseQR{% endblock %}
+{% block content %}
+<style>
+.shop-container {
+    max-width: 950px;
+    margin: 2.5em auto;
+    padding: 0 1em;
+}
+.shop-title {
+    color: #A020F0;
+    font-size: 1.6em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: 0 0 1.5em 0;
+    text-align: center;
+}
+.shop-products-list {
+    max-width: 950px;
+    margin: 0 auto 2em auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    justify-content: center;
+}
+.shop-product-card {
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px #d1b4e3;
+    padding: 1.3em 1em 1.5em 1em;
+    max-width: 230px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s;
+    text-align: center;
+    position: relative;
+}
+.shop-product-card:hover {
+    box-shadow: 0 4px 18px #A020F0;
+}
+.shop-product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+.shop-product-link:hover {
+    filter: brightness(0.93);
+}
+.shop-product-img {
+    max-width: 120px;
+    max-height: 120px;
+    margin-bottom: 0.7em;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 8px #e5e5e5;
+    object-fit: contain;
+}
+.shop-product-name {
+    color: #A020F0;
+    font-weight: bold;
+    font-size: 1.08em;
+    margin-bottom: 0.3em;
+    text-align: center;
+}
+.shop-product-desc {
+    color: #800080;
+    font-size: 0.97em;
+    margin-bottom: 0.7em;
+    text-align: center;
+}
+.shop-product-price {
+    color: #0090FF;
+    font-size: 1.13em;
+    font-weight: bold;
+    margin-bottom: 0.7em;
+}
+.shop-add-btn {
+    padding: 0.35em 0.7em;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.97em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    width: 80%;
+    margin: 0.5em auto 0 auto;
+    display: block;
+}
+.shop-add-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.shop-cart-btn-bottom {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 2em auto 0 auto;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.05em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.6em 1.4em;
+    box-shadow: 0 2px 8px #d1b4e3;
+    transition: background 0.2s;
+}
+.shop-cart-btn-bottom:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+@media (max-width: 900px) {
+    .shop-products-list { gap: 1.2em; }
+}
+@media (max-width: 700px) {
+    .shop-products-list { gap: 0.7em; }
+    .shop-container { padding: 0 0.2em; }
+    .shop-product-card { max-width: 99vw; }
+}
+@media (max-width: 500px) {
+    .shop-title { font-size: 1.12em; }
+    .shop-product-card { padding: 0.8em 0.3em 1em 0.3em; }
+    .shop-product-img { max-width: 80px; max-height: 80px; }
+    .shop-add-btn { font-size: 0.97em; }
+}
+</style>
+<div class="shop-container">
+    <div class="shop-title">
+        <i class="fas fa-shopping-cart"></i> Shop HouseQR
+    </div>
+    <div class="shop-products-list">
+        {% for id, nome, descrizione, prezzo, immagine in prodotti %}
+        <div class="shop-product-card">
+            <a href="{{ url_for('product_detail', product_id=id) }}" class="shop-product-link">
+                <img src="{{ url_for('static', filename='shop/' ~ immagine) }}"
+                     alt="{{ nome }}" class="shop-product-img">
+                <div class="shop-product-name">{{ nome }}</div>
+                <div class="shop-product-desc">{{ descrizione }}</div>
+                <div class="shop-product-price">{{ prezzo|round(2) }} €</div>
+            </a>
+            <a href="{{ url_for('add_to_cart', product_id=id) }}" class="shop-add-btn">
+                <i class="fas fa-cart-plus"></i> Aggiungi al carrello
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% set totale_articoli = session.cart.values()|sum if session.cart else 0 %}
+    <div style="text-align:center;">
+        <a href="{{ url_for('view_cart') }}" class="shop-cart-btn-bottom">
+            <i class="fas fa-shopping-cart"></i> Vai al carrello
+            {% if totale_articoli > 0 %}
+                <span style="background:#FF0090;color:#fff;border-radius:50%;padding:0 0.5em;font-size:0.95em;margin-left:0.2em;">
+                    {{ totale_articoli }}
+                </span>
+            {% endif %}
+        </a>
+    </div>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

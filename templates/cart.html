@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Carrello - HouseQR{% endblock %}
+{% block content %}
+<style>
+.cart-container {
+    max-width: 700px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.5em;
+}
+.cart-title {
+    color: #A020F0;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.2em;
+}
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px #d1b4e3;
+}
+.cart-table th, .cart-table td {
+    padding: 0.7em;
+    font-size: 1.04em;
+    text-align: left;
+}
+.cart-table th {
+    background: #A020F0;
+    color: #fff;
+}
+.cart-table tr:nth-child(even) {
+    background: #f3e8ff;
+}
+.cart-product-img {
+    width: 48px;
+    height: 48px;
+    vertical-align: middle;
+    border-radius: 8px;
+    margin-right: 0.5em;
+    object-fit: cover;
+    background: #fff;
+    box-shadow: 0 1px 4px #e5e5e5;
+}
+.cart-remove-link {
+    color: #FF0090;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 0.3em 0.7em;
+    transition: background 0.2s, color 0.2s;
+}
+.cart-remove-link:hover {
+    background: #FF0090;
+    color: #fff;
+    text-decoration: none;
+}
+.cart-total {
+    text-align: right;
+    font-size: 1.2em;
+    color: #A020F0;
+    font-weight: bold;
+    margin-bottom: 1.5em;
+}
+.cart-next-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 2em auto 0 auto;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.13em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.8em 2.2em;
+    box-shadow: 0 2px 8px #d1b4e3;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.cart-next-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+    box-shadow: 0 4px 16px #A020F0;
+}
+@media (max-width: 700px) {
+    .cart-container { padding: 1em 0.3em; }
+    .cart-table th, .cart-table td { padding: 0.5em; font-size: 0.98em; }
+    .cart-next-btn { font-size: 1em; padding: 0.7em 1.3em; }
+}
+@media (max-width: 500px) {
+    .cart-container { padding: 0.5em 0.1em; }
+    .cart-title { font-size: 1.1em; }
+    .cart-table th, .cart-table td { font-size: 0.95em; }
+    .cart-product-img { width: 36px; height: 36px; }
+}
+</style>
+<div class="cart-container">
+    <div class="cart-title">
+        <i class="fas fa-shopping-cart"></i> Il tuo carrello
+    </div>
+    {% if prodotti %}
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Prodotto</th>
+                    <th>Quantità</th>
+                    <th>Prezzo</th>
+                    <th>Totale</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in prodotti %}
+                <tr>
+                    <td>
+                        <img src="{{ url_for('static', filename='shop/' ~ p.immagine) }}" alt="{{ p.nome }}" class="cart-product-img">
+                        {{ p.nome }}
+                    </td>
+                    <td>{{ p.quantita }}</td>
+                    <td>{{ p.prezzo|round(2) }} €</td>
+                    <td>{{ p.totale|round(2) }} €</td>
+                    <td>
+                        <a href="{{ url_for('remove_from_cart', product_id=p.id) }}" class="cart-remove-link">Rimuovi</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="cart-total">
+            Totale: {{ totale|round(2) }} €
+        </div>
+        <div style="text-align:center;">
+            <a href="{{ url_for('checkout_address') }}" class="cart-next-btn">
+                <i class="fas fa-arrow-right"></i> Procedi all'indirizzo di spedizione
+            </a>
+        </div>
+    {% else %}
+        <div style="color:#800080;text-align:center;">Il carrello è vuoto.</div>
+    {% endif %}
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}Gestione Account - HouseQR{% endblock %}
+{% block content %}
+<style>
+.account-panel-container {
+    max-width: 700px;
+    margin: 2em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.5em;
+}
+.account-panel-title {
+    color: #A020F0;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.2em;
+}
+.account-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 2em;
+    flex-wrap: wrap;
+}
+.account-tab-btn {
+    background: #eee;
+    color: #800080;
+    border: none;
+    border-radius: 7px 7px 0 0;
+    font-size: 1.08em;
+    font-weight: bold;
+    padding: 0.7em 2.2em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.account-tab-btn.active,
+.account-tab-btn:focus {
+    color: #fff;
+}
+#tab-info.active { background: #A020F0; }
+#tab-security.active { background: #800080; }
+#tab-stats.active { background: #FF0090; }
+.account-section-form label { font-weight: bold; color: #A020F0; }
+.account-section-form input[type="text"],
+.account-section-form input[type="password"],
+.account-section-form input[type="email"] {
+    width: 100%;
+    border-radius: 6px;
+    border: 1.2px solid #A020F0;
+    font-size: 1em;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    background: #fff;
+    color: #800080;
+    box-sizing: border-box;
+}
+.account-section-form button {
+    width: 100%;
+    margin-top: 0.7em;
+}
+.account-security-section {
+    margin-top: 1.2em;
+    text-align: center;
+}
+.account-security-section button {
+    width: 100%;
+    margin-top: 0.5em;
+}
+.account-stats-cards {
+    display: flex;
+    gap: 2em;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2em;
+}
+.account-stats-card {
+    background: #f3e8ff;
+    border-radius: 12px;
+    padding: 1.3em 2.2em;
+    min-width: 120px;
+    box-shadow: 0 2px 8px #e5e5e5;
+    text-align: center;
+}
+.account-stats-card.stats-scansioni {
+    background: #e6f7f2;
+}
+.account-stats-card .stat-value {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #A020F0;
+}
+.account-stats-card.stats-scansioni .stat-value {
+    color: #FF0090;
+}
+.account-stats-card .stat-label {
+    color: #800080;
+    font-size: 1.08em;
+    letter-spacing: 1px;
+}
+@media (max-width: 700px) {
+    .account-panel-container { padding: 1em 0.3em; }
+    .account-tabs { gap: 0.3em; }
+    .account-tab-btn { padding: 0.6em 1em; font-size: 1em; }
+    .account-stats-cards { gap: 0.7em; }
+    .account-stats-card { padding: 1em 0.7em; min-width: 90px; }
+}
+</style>
+<div class="account-panel-container">
+    <div class="account-panel-title">
+        <i class="fas fa-user-cog"></i> Gestione Account
+    </div>
+    {% if success %}
+        <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+    {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <!-- Tabs per sezioni -->
+    <div class="account-tabs">
+        <button onclick="showTab('info')" class="account-tab-btn active" id="tab-info">Informazioni</button>
+        <button onclick="showTab('security')" class="account-tab-btn" id="tab-security">Sicurezza</button>
+        <button onclick="showTab('stats')" class="account-tab-btn" id="tab-stats">Statistiche</button>
+    </div>
+
+    <!-- Sezione Informazioni -->
+    <div id="section-info">
+        <form method="post" class="account-section-form">
+            <input type="hidden" name="action" value="update_personal">
+            <label>Nome</label>
+            <input type="text" name="nome" value="{{ user[0] }}" required>
+            <label>Cognome</label>
+            <input type="text" name="cognome" value="{{ user[1] }}" required>
+            <label>Email</label>
+            <input type="email" value="{{ user[2] }}" disabled style="background:#f3e8ff;">
+            <label>Telefono</label>
+            <input type="text" name="telefono" value="{{ user[3] }}" required>
+            <label>Indirizzo</label>
+            <input type="text" name="indirizzo" value="{{ user[4] }}" required>
+            <button type="submit" class="button" style="background:#A020F0;">Salva modifiche</button>
+        </form>
+    </div>
+
+    <!-- Sezione Sicurezza -->
+    <div id="section-security" style="display:none;">
+        <form method="post" class="account-section-form">
+            <input type="hidden" name="action" value="change_password">
+            <label>Password attuale</label>
+            <input type="password" name="old_password" required>
+            <label>Nuova password</label>
+            <input type="password" name="new_password" required>
+            <button type="submit" class="button" style="background:#800080;">Cambia password</button>
+        </form>
+        <div class="account-security-section">
+            <form method="post" action="{{ url_for('delete_account') }}" onsubmit="return confirm('Sei sicuro di voler eliminare il tuo account? Questa operazione è irreversibile!');">
+                <button type="submit" style="background:#e74c3c;color:#fff;padding:0.7em 2em;border:none;border-radius:7px;font-size:1.08em;font-weight:bold;cursor:pointer;">
+                    <i class="fas fa-trash"></i> Elimina il mio account
+                </button>
+            </form>
+            <p style="color:#842029;font-size:0.98em;margin-top:0.5em;">Attenzione: questa azione è definitiva e cancellerà tutti i tuoi dati.</p>
+        </div>
+        <div style="margin-top:1.5em;">
+            <b>Username:</b> {{ user[5] }}<br>
+            <b>Email:</b> {{ user[2] }}<br>
+            <b>Verifica email:</b> <span style="color:#28a745;">Verificata</span>
+        </div>
+    </div>
+
+    <!-- Sezione Statistiche -->
+    <div id="section-stats" style="display:none;">
+        <div class="account-stats-cards">
+            <div class="account-stats-card">
+                <div class="stat-value">{{ qr_count }}</div>
+                <div class="stat-label">QR creati</div>
+            </div>
+            <div class="account-stats-card stats-scansioni">
+                <div class="stat-value">{{ scansioni_totali }}</div>
+                <div class="stat-label">Scansioni totali</div>
+            </div>
+        </div>
+        <div style="text-align:center;font-size:1.1em;">
+            <span style="color:#800080;font-weight:600;">Ultima attività:</span>
+            <span style="color:#A020F0;">{{ ultima_attivita if ultima_attivita else "Mai" }}</span>
+        </div>
+    </div>
+</div>
+
+<script>
+function showTab(tab) {
+    document.getElementById('section-info').style.display = (tab === 'info') ? '' : 'none';
+    document.getElementById('section-security').style.display = (tab === 'security') ? '' : 'none';
+    document.getElementById('section-stats').style.display = (tab === 'stats') ? '' : 'none';
+    document.getElementById('tab-info').classList.toggle('active', tab === 'info');
+    document.getElementById('tab-security').classList.toggle('active', tab === 'security');
+    document.getElementById('tab-stats').classList.toggle('active', tab === 'stats');
+}
+</script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

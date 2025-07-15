@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}La tua Dashboard - HouseQR{% endblock %}
+{% block content %}
+<style>
+.dashboard-qr-list {
+    max-width: 800px;
+    margin: 2em auto 0 auto;
+    padding: 0 1em;
+}
+.dashboard-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+.dashboard-qr-title-main {
+    color: #A020F0;
+    font-size: 1.35em;
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 1px;
+}
+.dashboard-qr-btn {
+    padding: 0.7em 2em;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-block;
+}
+.dashboard-qr-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.dashboard-qr-btn-account {
+    background: #800080;
+}
+.dashboard-qr-btn-account:hover {
+    background: #A020F0;
+}
+.dashboard-qr-btn-admin {
+    background: #A020F0;
+}
+.dashboard-qr-btn-admin:hover {
+    background: #FF0090;
+}
+.dashboard-qr-btn-messages {
+    background: #A020F0;
+    margin-right: 0.3em;
+}
+.dashboard-qr-btn-messages:hover {
+    background: #FF0090;
+}
+.dashboard-qr-item {
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 1.5em 1.2em;
+    margin-bottom: 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}
+.dashboard-qr-title {
+    color: #A020F0;
+    font-size: 1.13em;
+    font-weight: bold;
+    margin-bottom: 0.2em;
+}
+.dashboard-qr-pub {
+    color: #800080;
+    font-size: 1.07em;
+    margin-bottom: 0.5em;
+    word-break: break-word;
+}
+.dashboard-qr-meta {
+    font-size: 0.98em;
+    color: #444;
+    margin-bottom: 0.3em;
+}
+.dashboard-qr-meta strong {
+    color: #A020F0;
+}
+.dashboard-qr-actions {
+    margin-top: 0.6em;
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+.dashboard-qr-btn-small {
+    padding: 0.5em 1.3em;
+    background: #800080;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-bottom: 0.3em;
+}
+.dashboard-qr-btn-small:hover {
+    background: #A020F0;
+}
+@media (max-width: 700px) {
+    .dashboard-qr-list { padding: 0 0.2em; }
+    .dashboard-header-row { flex-direction: column; align-items: stretch; gap: 0.7em; }
+    .dashboard-qr-item { padding: 1em 0.5em; }
+    .dashboard-header-row > div { flex-direction: column; gap: 0.7em; }
+    .dashboard-qr-btn { width: 100%; margin-bottom: 0.3em; }
+    .dashboard-qr-actions { flex-direction: column; gap: 0.5em; }
+}
+</style>
+
+<div class="dashboard-qr-list">
+    <div class="dashboard-header-row">
+        <h2 class="dashboard-qr-title-main"><i class="fas fa-qrcode"></i> I tuoi QR code</h2>
+        <div style="display:flex;gap:0.7em;flex-wrap:wrap;">
+            <a href="{{ url_for('user_messages') }}" class="dashboard-qr-btn dashboard-qr-btn-messages">
+                <i class="fas fa-envelope"></i> Messaggi ricevuti
+            </a>
+            <a href="{{ url_for('add_qr') }}" class="dashboard-qr-btn">+ Aggiungi nuovo QR</a>
+            <a href="{{ url_for('account_panel') }}" class="dashboard-qr-btn dashboard-qr-btn-account">Gestisci account</a>
+            {% if session.get('is_admin') %}
+                <a href="{{ url_for('admin_qr') }}" class="dashboard-qr-btn dashboard-qr-btn-admin">Admin</a>
+            {% endif %}
+        </div>
+    </div>
+    {% for qr in qr_codes %}
+        <div class="dashboard-qr-item">
+            <div class="dashboard-qr-title">QR ID: {{ qr['id'] }}</div>
+            <div class="dashboard-qr-pub">{{ qr['pubblico'] }}</div>
+            <div class="dashboard-qr-meta">
+                <strong>Scansioni:</strong> {{ qr['scansioni'] }}<br>
+                <strong>Ultima scansione:</strong>
+                {% if qr['ultima_scansione'] %}
+                    {{ qr['ultima_scansione'] }}
+                {% else %}
+                    Mai
+                {% endif %}
+            </div>
+            <div class="dashboard-qr-actions">
+                <a href="{{ url_for('view_qr', qr_id=qr['id']) }}" class="dashboard-qr-btn-small"><i class="fas fa-eye"></i> Vai al QR</a>
+                <a href="{{ url_for('dashboard', qr_id=qr['id']) }}" class="dashboard-qr-btn-small"><i class="fas fa-edit"></i> Modifica</a>
+            </div>
+        </div>
+    {% else %}
+        <div style="color:#800080;text-align:center;">Nessun QR code associato al tuo account.</div>
+    {% endfor %}
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

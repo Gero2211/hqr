@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Verifica 2FA - HouseQR{% endblock %}
+{% block content %}
+<style>
+.twofa-center {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.twofa-box {
+    width: 100%;
+    max-width: 340px;
+    background: #fff8ff;
+    padding: 1.8em 1.2em 1.5em 1.2em;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+.twofa-title {
+    color: #A020F0;
+    font-size: 1.25em;
+    margin-bottom: 0.7em;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.twofa-desc {
+    color: #800080;
+    font-size: 1em;
+    margin-bottom: 1.2em;
+    text-align: center;
+}
+.twofa-input {
+    width: 100%;
+    padding: 0.6em 0.7em;
+    border-radius: 6px;
+    border: 1.5px solid #A020F0;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+    letter-spacing: 0.08em;
+    text-align: center;
+    background: #fff;
+    color: #800080;
+    font-weight: bold;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s;
+    display: block;
+}
+.twofa-input:focus {
+    border: 2px solid #FF0090;
+}
+.twofa-btn {
+    width: 100%;
+    padding: 0.7em 0;
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 0.5em;
+    transition: background 0.2s;
+}
+.twofa-btn:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+.alert {
+    border-radius: 8px;
+    padding: 1em 1em;
+    font-size: 1.05em;
+    margin-bottom: 1.2em;
+    text-align: center;
+    font-weight: bold;
+}
+.alert-error {
+    background: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+@media (max-width: 500px) {
+    .twofa-box { padding: 1em 0.3em 1em 0.3em; }
+    .twofa-title { font-size: 1.08em; }
+    .twofa-btn { font-size: 1em; }
+}
+</style>
+<div class="twofa-center">
+    <div class="twofa-box">
+        <div class="twofa-title"><i class="fas fa-shield-alt"></i> Inserisci il codice</div>
+        <div class="twofa-desc">
+            Abbiamo inviato un codice di accesso al tuo indirizzo email.<br>
+            Inseriscilo qui sotto per continuare.
+        </div>
+        <form method="post" style="width:100%;">
+            <input type="text" name="code" id="code" maxlength="6" required class="twofa-input" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*" placeholder="Codice 2FA">
+            <button type="submit" class="twofa-btn">Verifica</button>
+        </form>
+        {% if error %}
+            <div class="alert alert-error" style="margin-top:1em;">{{ error }}</div>
+        {% endif %}
+    </div>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}

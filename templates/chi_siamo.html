@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Chi siamo - HouseQR{% endblock %}
+{% block content %}
+<style>
+.chisiamo-hero {
+    min-height: 30vh;
+    background: linear-gradient(120deg, #fff8ff 70%, #A020F0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.chisiamo-title {
+    color: #A020F0;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+    letter-spacing: 1.5px;
+    text-align: center;
+}
+.chisiamo-subtitle {
+    color: #800080;
+    font-size: 1.15em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    max-width: 700px;
+}
+.chisiamo-section {
+    max-width: 950px;
+    margin: 2.5em auto 0 auto;
+    padding: 0 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    align-items: flex-start;
+    justify-content: center;
+}
+.chisiamo-block {
+    flex: 1 1 320px;
+    min-width: 270px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px #e5e5e5;
+    padding: 1.5em 1.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1em;
+    transition: box-shadow 0.2s;
+}
+.chisiamo-block:hover {
+    box-shadow: 0 4px 18px #A020F0;
+}
+.chisiamo-block h3 {
+    color: #A020F0;
+    font-size: 1.18em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+.chisiamo-block p {
+    color: #800080;
+    font-size: 1.05em;
+    margin: 0;
+}
+.chisiamo-team {
+    width: 100%;
+    margin-top: 2.5em;
+    text-align: center;
+}
+.chisiamo-team-title {
+    color: #A020F0;
+    font-size: 1.15em;
+    font-weight: bold;
+    margin-bottom: 0.7em;
+}
+.chisiamo-team-members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 0.5em;
+}
+.chisiamo-team-member {
+    background: #fff8ff;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px #e5e5e5;
+    padding: 1.2em 1em;
+    min-width: 160px;
+    max-width: 220px;
+    text-align: center;
+}
+.chisiamo-team-member img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5em;
+    border: 2px solid #A020F0;
+}
+.chisiamo-team-member .name {
+    color: #A020F0;
+    font-weight: bold;
+    margin-bottom: 0.2em;
+}
+.chisiamo-team-member .role {
+    color: #800080;
+    font-size: 0.98em;
+    margin-bottom: 0.2em;
+}
+.chisiamo-team-member .bio {
+    font-size: 0.95em;
+    color: #444;
+    opacity: 0.85;
+}
+@media (max-width: 900px) {
+    .chisiamo-section { gap: 1em; }
+}
+@media (max-width: 700px) {
+    .chisiamo-section { flex-direction: column; gap: 1.5em; }
+    .chisiamo-block { min-width: 0; }
+    .chisiamo-team-members { flex-direction: column; align-items: center; }
+    .chisiamo-title { font-size: 1.3em; }
+    .chisiamo-subtitle { font-size: 1em; }
+}
+@media (max-width: 500px) {
+    .chisiamo-hero { padding: 20px 0 20px 0; }
+    .chisiamo-section { padding: 0 0.3em; }
+    .chisiamo-block { padding: 1em 0.6em; }
+}
+</style>
+
+<div class="chisiamo-hero">
+    <div class="chisiamo-title">Chi siamo</div>
+    <div class="chisiamo-subtitle">
+        Siamo un team di innovatori appassionati di tecnologia, sicurezza e semplicità.<br>
+        Con HouseQR vogliamo rendere la gestione delle informazioni domestiche più sicura, moderna e accessibile a tutti.
+    </div>
+</div>
+
+<div class="chisiamo-section">
+    <div class="chisiamo-block">
+        <h3>La nostra missione</h3>
+        <p>
+            Offrire a famiglie, professionisti e aziende uno strumento affidabile per gestire e condividere informazioni importanti in modo semplice e protetto, grazie alla tecnologia dei QR code e a un sistema di aree riservate personalizzabili.
+        </p>
+    </div>
+    <div class="chisiamo-block">
+        <h3>Perché HouseQR?</h3>
+        <p>
+            Crediamo che la privacy e la sicurezza dei dati siano diritti fondamentali. HouseQR nasce per dare a chiunque il controllo totale sulle proprie informazioni, scegliendo cosa rendere pubblico e cosa mantenere riservato.
+        </p>
+    </div>
+    <div class="chisiamo-block">
+        <h3>I nostri valori</h3>
+        <p>
+            <b>Innovazione</b>, <b>trasparenza</b>, <b>affidabilità</b> e <b>attenzione all’utente</b> sono i pilastri su cui costruiamo ogni giorno la nostra piattaforma.
+        </p>
+    </div>
+</div>
+
+<div style="margin:3em auto 1.5em auto; text-align:center; color:#A020F0; font-size:1.05em;">
+    <span style="opacity:0.7;">&copy; {{ current_year }} HouseQR - Siamo qui per te!</span>
+</div>
+{% endblock %}

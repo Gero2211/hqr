@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Indirizzo di spedizione{% endblock %}
+{% block content %}
+<style>
+.address-form-container {
+    max-width: 420px;
+    margin: 2.5em auto;
+    background: #fff8ff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #d1b4e3;
+    padding: 2em 1.5em;
+}
+.address-form-title {
+    color: #A020F0;
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    text-align: center;
+}
+.address-form label {
+    color: #800080;
+    font-weight: 600;
+    margin-bottom: 0.2em;
+    display: block;
+}
+.address-form input {
+    width: 100%;
+    border-radius: 6px;
+    border: 1.2px solid #A020F0;
+    font-size: 1em;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    background: #fff;
+    color: #800080;
+    box-sizing: border-box;
+}
+.address-form-row {
+    display: flex;
+    gap: 1em;
+}
+.address-form-row > div { flex: 1; }
+.address-form button {
+    background: linear-gradient(90deg, #A020F0 60%, #FF0090 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 0.7em 2em;
+    font-size: 1.08em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+}
+.address-form button:hover {
+    background: linear-gradient(90deg, #FF0090 60%, #A020F0 100%);
+}
+@media (max-width: 600px) {
+    .address-form-container { padding: 1em 0.3em; }
+    .address-form-title { font-size: 1.07em; }
+    .address-form input { font-size: 0.97em; }
+    .address-form-row { flex-direction: column; gap: 0; }
+    .address-form-row > div { width: 100%; }
+    .address-form button { font-size: 1em; padding: 0.7em 1em; }
+}
+</style>
+<div class="address-form-container">
+    <div class="address-form-title">
+        <i class="fas fa-truck"></i> Indirizzo di spedizione
+    </div>
+    <form method="post" class="address-form">
+        <label>Nome</label>
+        <input type="text" name="nome" value="{{ dati.nome|default('') }}" required>
+        <label>Cognome</label>
+        <input type="text" name="cognome" value="{{ dati.cognome|default('') }}" required>
+        <label>Via</label>
+        <input type="text" name="via" value="{{ dati.via|default('') }}" required>
+        <div class="address-form-row">
+            <div>
+                <label>Civico</label>
+                <input type="text" name="civico" value="{{ dati.civico|default('') }}" required>
+            </div>
+            <div>
+                <label>CAP</label>
+                <input type="text" name="cap" value="{{ dati.cap|default('') }}" required>
+            </div>
+        </div>
+        <label>Città</label>
+        <input type="text" name="citta" value="{{ dati.citta|default('') }}" required>
+        <div class="address-form-row">
+            <div>
+                <label>Provincia</label>
+                <input type="text" name="provincia" value="{{ dati.provincia|default('') }}" required>
+            </div>
+            <div>
+                <label>Stato</label>
+                <input type="text" name="stato" value="{{ dati.stato|default('Italia') }}" required>
+            </div>
+        </div>
+        <button type="submit">
+            <i class="fas fa-arrow-right"></i> Procedi al pagamento
+        </button>
+    </form>
+</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+{% endblock %}
